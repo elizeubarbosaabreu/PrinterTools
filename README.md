@@ -14,11 +14,7 @@ Agora clone este repositório em seu terminal ou prompt de comandos:
  
 ~~~
 
-git clone https://github.com/elizeubarbosaabreu/PrinterTools
-cd PrinterTools
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requeriments.txt
+git clone https://github.com/elizeubarbosaabreu/PrinterTools && cd PrinterTools && python3 -m venv .venv && source .venv/bin/activate && pip install -r requeriments.txt
 
 ~~~
  
