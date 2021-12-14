@@ -6,32 +6,27 @@ img = b'iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBj
 
 def noises():
     try:
-        os.system('escputil -n')
-        sg.popup('Teste de ruídos',
-                 'Sua impressora vai imprimir uma página com diversas informações... \n\nVerifique se todas as cores e linhas estão com qualidade de impressão satisfatória...')
+        cmd = 'escputil -n'
+        shellcmd = os.popen(cmd)
+        print(shellcmd.read())                
     except:
         sg.popup_timed('Erro', 'Verifique se tens o escputil instalado em seu computador ou uma impressora compatível instalada...')
     
 def simple_cleaning():
     try:
-        os.system('escputil -c')
-        sg.popup('Limpeza Simples',
-                 'Processo de limpeza de cabeçote de impressão inicializado... \n\nAguarde até que a impressora fique silenciosa e as luzes parem de piscar...')
+        cmd = 'escputil -c'
+        shellcmd = os.popen(cmd)
+        print(shellcmd.read())        
     except:
         sg.popup_timed('Erro', 'Verifique se tens o escputil instalado em seu computador ou uma impressora compatível instalada...')
 
-def intense_cleaning():    
+def intense_cleaning():
     try:        
-        sg.popup_timed('Limpeza Intensa', 'Processo de limpeza de cabeçote de impressão intensa selecionado... \n\nAguarde até que a impressora fique silenciosa e as luzes parem de piscar...')
-        os.system('escputil -c')
-        sleep(120)
-        os.system('escputil -c')
-        sleep(120)
-        os.system('escputil -c')
-        sleep(120)
-        os.system('escputil -c')
-        sleep(120)
-        os.system('escputil -c')
+        for i in range(5):
+            cmd = 'escputil -c'
+            shellcmd = os.popen(cmd)        
+            print(shellcmd.read())
+            sleep(120)
         
     except:
         sg.popup_timed('Atenção', 'Verifique se tens o escputil instalado em seu computador ou uma impressora compatível instalada...')
@@ -63,24 +58,60 @@ layout =[
      sg.T('Printer Tools', font=('Arial', 24)),
      sg.Stretch()],
     [sg.T(size=(1,1))],
-    [sg.Button('Teste de Impressão', font=('Arial', 15), size=(30,4))],
-    [sg.Button('Limpeza Simples', font=('Arial', 15), size=(30,4))],
-    [sg.Button('Limpeza Pesada', font=('Arial', 15), size=(30,4))],
+    [sg.Stretch(),
+     sg.Button('Teste de Impressão', font=('Arial', 15), size=(30,2)),
+     sg.Stretch()],
+    [sg.Stretch(),
+     sg.Button('Limpeza Simples', font=('Arial', 15), size=(30,2)),
+     sg.Stretch()],
+    [sg.Stretch(),
+     sg.Button('Limpeza Pesada', font=('Arial', 15), size=(30,2)),
+     sg.Stretch()],
+    [sg.Stretch(),
+     sg.Output(font=('Courier', 8), size=(85,10)),
+     sg.Stretch()],
     [sg.T(size=(1,3))]
     ]
 
-window = sg.Window('Printer Tools', layout)
+window = sg.Window('Printer Tools', layout, size=(350, 420), resizable=True)
 
 while True:
     event, values = window.read()
     if event == sg.WIN_CLOSED:
         break
     elif event in ('Teste de Impressão'):
-        noises()
+        continuar = sg.popup_yes_no(
+            '''Este procedimento imprime uma página de testes.
+
+Certifique que tem papel na impressora e a mesma está definida como "Impressora Padrão"...
+
+Deseja continuar?''')
+        if continuar in ('No'):
+            sg.popup_cancel('Impressão de Teste cancelada')            
+        else:
+            noises()
     elif event in ('Limpeza Simples'):
-        simple_cleaning()
+        continuar = sg.popup_yes_no(
+            '''Este é um processo demorado e consome tinta.
+
+Você não pode desligar a impressora durante o procedimento
+
+Deseja continuar?''')
+        if continuar in ('No'):
+            sg.popup_cancel('Limpeza Simples cancelada')            
+        else:
+            simple_cleaning()
     elif event in ('Limpeza Pesada'):
-        intense_cleaning()
+        continuar = sg.popup_yes_no(
+            '''Este é um processo muito demorado e gasta bastante tinta.
+
+Você não pode desligar a impressora durante o procedimento...
+
+Deseja continuar?''')
+        if continuar in ('No'):
+            sg.popup_cancel('Limpeza Pesada cancelada')            
+        else:
+            intense_cleaning()
     elif event in ('Manual'):
         manual()
     elif event in ('GitHub'):
