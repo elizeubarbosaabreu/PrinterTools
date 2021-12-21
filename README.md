@@ -4,7 +4,7 @@
 
 ## O que é PrinterTools?
 
-**PrinterTools** é uma ferramenta gráfica que usa o escputil para testar e fazer limpeza de cabeçote de impressão em sistemas Linux e em especial o Raspberry Pi...
+**PrinterTools** é uma ferramenta gráfica que usa o escputil para testar e fazer limpeza de cabeçote de impressão em impressoras Epson sistemas Linux e em especial o Raspberry Pi...
 
 ## Como ter o PrinterTools em seu computador?
 
